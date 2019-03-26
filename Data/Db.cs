@@ -35,5 +35,9 @@ namespace Omu.ProDinner.Data
 
             base.OnModelCreating(modelBuilder);
         }
+        public void Sum()
+        {
+        
+        }
     }
 }
