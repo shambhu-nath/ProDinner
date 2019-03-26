@@ -216,6 +216,7 @@ insert dinnermeals(dinnerid,mealid) values(10,2)
 insert dinnermeals(dinnerid,mealid) values(10,3)
 insert dinnermeals(dinnerid,mealid) values(10,4)
 insert dinnermeals(dinnerid,mealid) values(10,5)
+                  
 
 select * from chefs
 select * from dinners
