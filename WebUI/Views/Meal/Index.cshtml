@@ -1,0 +1,76 @@
+@{
+    ViewBag.Title = "Meals";
+}
+
+<h2>@Mui.Meals</h2>
+
+@Html.InitCrudPopupsForAjaxList("MealsList", "Meal", "Meal", "adjustMeals", createPopupHeight:300)
+
+@(Html.Awe().InitPopup()
+            .Name("changePicture")
+            .Url(Url.Action("ChangePicture"))
+            .Fullscreen())
+
+<div class="bar">
+    <div class="fr">
+        @Html.Awe().TextBox("Search").Placeholder(Mui.Search).CssClass("searchtxt")
+    </div>
+    @Html.Awe().Button().Text(Mui.Create).OnClick(Html.Awe().OpenPopup("createMeal"))
+</div>
+
+@(Html.Awe().AjaxList("MealsList")
+            .Url(Url.Action("Search", "MealsAjaxList"))
+            .CssClass("mealslist")
+            .HtmlAttributes(new { style = "margin: 0 -5px;" })
+            .Parent("Search", "search")
+            .ParameterFunc("getMealsAlPageSize"))
+
+<script type="text/javascript">
+    // called after changing picture
+    function updateMeal(id) {
+        awe.ajx('@Url.Action("GetMeal")', awe.srl({ id: id }))
+            .done(function (res) {
+                utils.itemEditedAl('MealsList', adjustMeals)(res);
+            });
+    }
+
+    $(function () {
+        $(document).ajaxComplete(adjustMeals);
+        $(window).resize(adjustMeals);
+    });
+
+    function getMealsAlPageSize() {
+        var w = $('#MealsList').width();
+        var mealWidth = 484;
+        if (w < mealWidth) mealWidth = w - 20;
+        var countPerRow =  parseInt(w / mealWidth, 10);
+        var rows = parseInt(10 / countPerRow, 10);
+        var pageSize = Math.max(rows, 1) * countPerRow;
+        
+        return { pageSize: pageSize };
+    }
+
+    // adjusts the layout of the meal items
+    function adjustMeals() {
+        if ($.support.cors)
+            $(".notcool").hide();
+        else
+            $(".cool").hide();
+
+        var w = $('#MealsList').width();
+        var mw = 484;
+        if (w < mw) mw = w - 20;
+        var count = Math.floor(w / mw);
+        var rest = w % mw;
+        var nw = mw + (rest / count) - 10;
+        $('.meal').css('width', nw + 'px');
+        $('.comments').css('width', $('.comments:first').parent().width() - $('.comments:first').prev().width() - 20);
+    }
+</script>
+
+<link href="@Url.Content("~/Content/jquery.Jcrop.css")" rel="stylesheet" type="text/css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/vendor/jquery.ui.widget.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/jquery.iframe-transport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/jquery.fileupload.min.js"></script>
+<script src='@Url.Content("~/Scripts/jquery.Jcrop.min.js")' type="text/javascript" ></script>

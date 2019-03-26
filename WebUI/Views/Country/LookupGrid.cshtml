@@ -1,0 +1,29 @@
+@model LookupPopupInput
+@using (Html.Awe().BeginContext())
+{
+    var gridId = "Grid1";
+
+    @Html.InitDeletePopupForGrid(gridId, "Country")
+
+    <div class="bar">
+        <div style="float: right;">
+            @Html.Awe().TextBoxFor(o => o.Search).Placeholder(Mui.Search).CssClass("searchtxt")
+        </div>
+        @Html.InlineCreateButtonForGrid(gridId, text: Mui.Create)
+    </div>
+
+    @(Html.Awe().Grid(gridId)
+      .Mod(o => o.InlineEdit(Url.Action("Create","CountryInlineEdit"), Url.Action("Edit", "CountryInlineEdit")).KeyNav().PageInfo())
+      .Url(Url.Action("GridGetItems", "Country"))
+      .Parent(o => o.Search)
+      .Selectable(SelectionType.Single)
+      .Groupable(false)
+      .Height(350)
+      .Columns(
+          new Column { Bind = "Id", Width = 55 }.Mod(o => o.InlineId()),
+          new Column { Bind = "Name" }.Mod(o => o.Inline(Html.Awe().TextBox("Name"))),
+          new Column { ClientFormat = GridUtils.InlineEditFormat(true), Width = 70 },
+          new Column { ClientFormat = Html.InlineDeleteFormatForGrid(gridId, nofocus: true, text: Mui.Cancel), Width = 100 }))
+}
+@*using nofocus on edit and del buttons because the grid has KeyNav(),
+when focused on the grid hitting Tab should not focus an edit/del button but the Ok button of the grid*@

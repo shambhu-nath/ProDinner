@@ -1,0 +1,36 @@
+@using Omu.ProDinner.WebUI.ViewModels.Display
+@model IEnumerable<Meal>
+@foreach (var o in Model)
+{
+    <li data-val='@(o.Id)' class="awe-li meal awe-il">
+        <div>
+            @o.Name
+        <div class="fr">
+            @Html.Partial("deletebtn", new DelBtn { Id = o.Id, IsDeleted = o.IsDeleted, Name = "Meal" })
+        </div>
+    </div>
+    <div>
+        <div class="fl">
+            <img src='@Url.Content("~/pictures/Meals/" + (string.IsNullOrEmpty(o.Picture) ? "0.jpg" : o.Picture))' class="thumb" alt='picture'/>
+        </div>
+        <div class="comments">@o.Comments</div>
+        <br class="cbt" />
+    </div>
+    <div class="cbt" style="margin-top: 0.5em;">
+        <div class='cool fl'>
+            @(Html.Awe().Button()
+                    .Text(Mui.change_picture)
+                    .OnClick(Html.Awe().OpenPopup("changePicture").Params(new { o.Id })))
+        </div>
+        <div class='notcool fl'>
+            <button type="button" class="awe-btn" onclick="location.href='@Url.Action("ochangepicture", "Meal", new { o.Id })'">@Mui.change_picture</button>
+        </div>
+        <div class="fr">
+            @(Html.Awe().Button()
+                    .Text("<span class=\"ico-crud ico-edit\"></span>")
+                    .CssClass("editbtn")
+                    .OnClick(Html.Awe().OpenPopup("editMeal").Params(new { o.Id })))
+        </div>
+    </div>
+</li>
+}

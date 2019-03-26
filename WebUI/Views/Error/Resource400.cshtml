@@ -1,0 +1,31 @@
+@{
+    ViewBag.Title = "Bad Request (HTTP 400)";
+}
+<div>
+    <div style="padding: 10px;">
+        <p>
+            The request is missing some required parameters.
+        </p>
+        <p>
+            If you feel something is missing that should be here, <a href="https://wwww.aspnetawesome.com/contactus">contact us</a>
+        </p>
+    </div>
+    <div class="errorMsg">
+        <style>
+            .errorMsg {
+                padding: 10px;
+            }
+
+                .errorMsg pre {
+                    background-color: #ffffcc;
+                    padding: 1em;
+                    overflow: auto;
+                    font-family: "Courier New", Courier;
+                }
+        </style>
+        <p>
+            @Html.Raw(ViewData["debugInfo"])
+        </p>
+        <pre>@ViewData["Message"]</pre>
+    </div>
+</div>

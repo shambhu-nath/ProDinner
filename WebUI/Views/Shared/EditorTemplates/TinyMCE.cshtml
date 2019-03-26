@@ -1,0 +1,15 @@
+@model string
+@Html.TextArea("", Model)
+<script type="text/javascript">
+    (function () {
+        var id = "@(ViewData.TemplateInfo.GetFullHtmlFieldId(string.Empty))";
+        var ex = tinymce.get(id);
+        if (ex) ex.destroy();
+
+        tinymce.init({ selector: '#' + id, height: 180, branding:false });
+
+        $('#' + id).closest('form').submit(function () {
+             tinymce.triggerSave();
+        });
+    })();
+</script>

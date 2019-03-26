@@ -1,0 +1,33 @@
+@{
+    ViewBag.Title = "Resouce not found (HTTP 404)";
+}
+<h1>Resource not found</h1>
+<hr />
+<div>
+    <div style="padding: 10px;">
+        <p>
+            The resource you are looking for was not found.
+        </p>
+        <p>
+            If you feel something is missing that should be here, <a href="https://wwww.aspnetawesome.com/contactus">contact us</a>
+        </p>
+    </div>
+    <div class="errorMsg">
+        <style>
+            .errorMsg {
+                padding: 10px;
+            }
+
+                .errorMsg pre {
+                    background-color: #ffffcc;
+                    padding: 1em;
+                    overflow: auto;
+                    font-family: "Courier New", Courier;
+                }
+        </style>
+        <p>
+            @Html.Raw(ViewData["debugInfo"])
+        </p>
+        <pre>@ViewData["Message"]</pre>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+@{
+    Layout = "_FieldLayout.cshtml";
+}
+@Html.Awe().Lookup("").LookupGrid(Url.Action("LookupGrid","Country")).GetItemUrl(Url.Action("GetCountryItem","Data")).MaxWidth(700)

@@ -1,0 +1,95 @@
+@{
+    ViewBag.Title = "Countries";
+}
+<h2>@Mui.Country</h2>
+@Html.InitCrudPopupsForGrid("CountryGrid", "Country", 200)
+
+@Html.Awe().InitPopupForm().Name("deleteBatch").Url(Url.Action("BatchDelete")).Success("reload").Height(200).Modal(true)
+@Html.Awe().InitCall("restoreBatch").Url(Url.Action("BatchRestore")).Success("reload")
+
+<div class="bar">
+    <div class="fr">
+        @(Html.Awe().TextBox("txtSearch").Placeholder(Mui.Search).CssClass("searchtxt"))
+    </div>
+
+    @Html.Awe().Button().Text(Mui.Create).OnClick(Html.Awe().OpenPopup("createCountryGrid"))
+
+    <span id="selAct" style="display: none;">
+        @Html.Awe().Button().Text(Mui.Delete).CssClass("mbtn").OnClick("batchDel()").Id("btnDel")
+
+        @if (WebUtils.IsUserAdmin())
+        {
+            <button type="button" onclick=" batchRestore() " class="awe-btn mbtn">Restore</button>
+        }
+    </span>
+</div>
+
+<script>
+    function getSelection() {
+        return $('#CountryGrid').find('.awe-row.awe-selected').map(function (_, row) {
+            return utils.model($(row)).Id;
+        }).get();
+    }
+
+    function batchRestore() {
+        var ids = getSelection();
+        if (ids.length)
+            awe.oc('restoreBatch', { params: { ids: ids } });
+    }
+
+    function batchDel() {
+        var ids = getSelection();
+        if (ids.length)
+            awe.open('deleteBatch', { params: { ids: ids } });
+    }
+
+    function reload() {
+        $('#CountryGrid').data('api').load();
+    }
+
+    function isDelFormat(o) {
+        return o.IsDeleted ? '@Mui.Yes' : '@Mui.No';
+    }
+
+    $(function () {
+        var grid = $('#CountryGrid');
+        var selact = $('#selAct');
+        grid.on('aweselect', function () {
+            if (grid.data('api').getSelection().length) {
+                selact.show();
+            } else {
+                selact.hide();
+            }
+
+            grid.find('.awe-row .o-chk').removeClass('o-chked');
+            grid.find('.awe-row.awe-selected .o-chk').addClass('o-chked');
+        });
+    });
+</script>
+
+@(Html.Awe().Grid("CountryGrid")
+      .Url(Url.Action("GridGetItems"))
+      .Parent("txtSearch")
+      .Persistence(Persistence.Session)
+      .Selectable()
+      .Mod(o => o.PageInfo().PageSize())
+      .Height(300)
+      .Groupable(false)
+      .SingleColumnSort()
+      .Columns(
+          new Column
+          {
+              Width = 38,
+              ClientFormat = "<div class=\"o-chk\"><div class=\"o-chkc\"><div class=\"o-chkico\"></div></div></div>",
+          },
+          new Column { Name = "Id", Width = 70 },
+          new Column { Name = "Name" },
+          new Column
+          {
+              Name = "IsDeleted",
+              Width = 100,
+              ClientFormatFunc = "isDelFormat",
+              Hidden = !WebUtils.IsUserAdmin(),
+              Header = "Deleted"
+          },
+          new Column { ClientFormat = GridUtils.EditFormat("editCountryGrid"), Width = 50 }))

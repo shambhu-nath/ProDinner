@@ -1,0 +1,39 @@
+@{
+    ViewBag.Title = "Meals Grid CRUD";
+}
+
+<h2>Meals grid crud </h2>
+
+@Html.InitCrudPopupsForGrid("mealsg", "Meal", 300)
+
+@(Html.Awe().InitPopup()
+        .Name("changePicture")
+        .Url(Url.Action("ChangePicture"))
+        .Parameter("gridId", "mealsg")
+        .Fullscreen())
+
+@(Html.Awe().Grid("mealsg")
+    .Url(Url.Action("GetGridData"))
+    .Columns(
+        new Column { Bind = "Id", Width = 100 },
+        new Column { Bind = "Name" },
+        new Column { Bind = "Comments" },
+        new Column { ClientFormatFunc = "mealPic" },
+        new Column { ClientFormat = ProGridUtils.ChangePictureFormat("changePicture"), Width = 140 },
+        new Column { ClientFormat = Html.EditFormatForGrid("mealsg"), Width = 55 },
+        new Column { ClientFormatFunc = "utils.deleteFormat('deletemealsg','mealsg')", Width = 55 }))
+<script>
+    var picsf = '@Url.Content("~/pictures/Meals/")';
+
+    function mealPic(o) {
+        var fname = o.Picture || '0.jpg';
+        return '<img src="' + picsf + fname + '" class="thumb" alt="' + o.Name + '"/>';
+    }
+</script>
+
+<link href="@Url.Content("~/Content/jquery.Jcrop.css")" rel="stylesheet" type="text/css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/vendor/jquery.ui.widget.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/jquery.iframe-transport.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.12.1/js/jquery.fileupload.min.js"></script>
+<script src='@Url.Content("~/Scripts/jquery.Jcrop.min.js")' type="text/javascript"></script>

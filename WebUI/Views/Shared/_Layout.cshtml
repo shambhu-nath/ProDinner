@@ -1,0 +1,110 @@
+@using System.Web.Optimization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        @ViewBag.Title - ProDinner ASP.net MVC Awesome Demo Application
+    </title>
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon" />
+    @{
+        var settings = SettingsController.ReadSettings(HttpContext.Current.Request);
+        var ver = 111;
+    }
+    <script>
+        document.ver = @ver;
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600|Roboto" rel="stylesheet">
+    <link href="@Url.Content("~/Content/themes/" + settings.Theme + "/AwesomeMvc.css")?v=@ver" rel="stylesheet" type="text/css" id="aweStyle" />
+    <link href="@Url.Content("~/Content/site.css")?v=@ver" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    @*jquery needs to be at the top (for document.ready $(function(){...})*@
+
+    <script>
+        var slinks = [
+        { k: "@Url.Action("Index", "Chef")", c: "@Mui.Chef" },
+        { k: "@Url.Action("Index", "Country")", c: "@Mui.Country" },
+        { k: "@Url.Action("Index", "Dinner")", c: "Dinners" },
+        { k: "@Url.Action("Index", "Feedback")", c: "Feedback" }
+        ];
+    </script>
+</head>
+<body class="@settings.Theme">
+    <noscript>
+        <div id="nos">
+            this site works best with javascript allowed
+        </div>
+    </noscript>
+    @(Html.Awe().InitPopup().Name("about")
+            .Url(Url.Action("About", "Home"))
+            .Modal()
+            .LoadOnce()
+            .Title("prodinner, where pros eat")
+            .Mod(o => o.OutClickClose()))
+    <div id="header">
+        <nav class="cont" role="navigation">
+            <ul class="menu">
+                <li><a id='logo' href="@Url.Content("~")"><i></i></a></li>
+                <li class="optional">@Html.ActionLink(Mui.Home, "Index", "Home")</li>
+                <li>@Html.ActionLink(Mui.Meals, "Index", "Meal")</li>
+                @if (WebUtils.IsUserAdmin())
+                {
+                    <li>@Html.ActionLink("Users", "Index", "User")</li>
+                }
+                <li>
+                    @(Html.Awe().AjaxRadioList("ddlStuff")
+                          .DataFunc("utils.getItems(slinks)")
+                          .CssClass("nowave")
+                          .MenuDropdown(o => o.Caption(Mui.Stuff).OpenOnHover()))
+                </li>
+                <li><a href="#" onclick="awe.open('about', { params: { anim: 'top fade' } }, event)">@Mui.About</a></li>
+                @*anim 'top fade' in site.js 'aweopen' event handler*@
+        </ul>
+        <ul class="menu" style="float: right;">
+            <li>@Html.Partial("login")</li>
+        </ul>
+    </nav>
+</div>
+@Html.Awe().InitPopup().Name("settings").Url(Url.Action("Index", "Settings")).LoadOnce().Width(100).Mod(o => o.Toggle().Dropdown())
+<main id="main" class="cont">
+    <div class="awe-il settings">
+        <button type="button" class="awe-btn btnSettings" onclick="awe.open('settings', {}, event)"><span class="ico-settings">&nbsp;</span></button>
+    </div>
+    @RenderBody()
+</main>
+<footer id="footer">
+    <nav class="cont" role="navigation">
+        <div>download here: <a href='https://www.aspnetawesome.com'>https://www.aspnetawesome.com</a></div>
+        <div>
+            <a href="https://www.aspnetawesome.com/ContactUs">Contact Us</a>
+            <a href="https://www.aspnetawesome.com/Company/TermsOfUse">Terms of Use</a>
+            <a href="https://www.aspnetawesome.com/Company/PrivacyPolicy">Privacy policy</a>
+        </div>
+    </nav>
+</footer>
+@Html.Partial("doghelp")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.1/js.cookie.min.js" type="text/javascript"></script>
+@Scripts.Render("~/bundle/Scripts/js")
+
+@*used in utils.init and sent on all post requests made by awe*@
+@Html.AntiForgeryToken()
+
+@Html.Awe().Init()
+
+<script type="text/javascript">
+    var root = '@(Url.Content("~"))';
+    awem.clientDict = $.extend(awem.clientDict, @Html.Raw(Json.Encode(ClientSideUtils.GetClientDict())));
+    awe.gmd = [awem.gridLoading, awem.gridPageInfo]; // set global grid mods
+
+    var controller = '@(ViewContext.RouteData.Values["Controller"].ToString().ToLower())';
+    var action = '@(ViewContext.RouteData.Values["Action"].ToString().ToLower())';
+    $(function () {
+        documentReady(root, controller, action);
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

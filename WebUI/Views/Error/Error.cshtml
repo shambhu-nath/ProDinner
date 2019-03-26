@@ -1,0 +1,36 @@
+@{
+    ViewBag.Title = "Sorry, an error occured";
+}
+<h1>Oops! Something Bad Happened!</h1>
+<hr />
+<div>
+    <div style="padding: 10px;">
+        <p>
+            We apologize for any inconvenience, but an unexpected error occurred while you were
+            browsing our site.
+        </p>
+        <p>
+            It's not strictly necessary, but if you'd like to give us additional information
+            about this error, please <a href="https://wwww.aspnetawesome.com/contactus">contact us</a>
+        </p>
+    </div>
+
+    <div class="errorMsg">
+        <style>
+            .errorMsg {
+                padding: 10px;
+            }
+
+                .errorMsg pre {
+                    background-color: #ffffcc;
+                    padding: 1em;
+                    overflow: auto;
+                    font-family: "Courier New", Courier;
+                }
+        </style>
+        <p>
+            @Html.Raw(ViewData["debugInfo"])
+        </p>
+        <pre>@ViewData["Message"]</pre>
+    </div>
+</div>

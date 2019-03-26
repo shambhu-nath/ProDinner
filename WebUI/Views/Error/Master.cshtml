@@ -1,0 +1,32 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <div>
+        <style>
+            h2, h3 {
+                font-family: helvetica, sans-serif;
+            }
+
+            .msg {
+                background-color: #ffffcc;
+                padding: 1em;
+                overflow: auto;
+                margin: 1em;
+                font-family: "Courier New", Courier;
+            }
+        </style>
+        <h2>Oops! Something Bad Happened!</h2>
+        <p>
+            @ViewData["debugInfo"]
+        </p>
+        <pre class="msg">@ViewData["Message"]</pre>
+    </div>
+</body>
+</html>

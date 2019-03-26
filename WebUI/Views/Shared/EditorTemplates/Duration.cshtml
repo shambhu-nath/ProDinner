@@ -1,0 +1,4 @@
+@{
+    Layout = "_FieldLayout.cshtml";
+}
+@Html.Awe().TextBox("").Numeric().CssClass("etxt").FormatFunc(string.Format("utils.duration('{0}','{1}','{2}')", Mui.hour, Mui.hours, Mui.min))
