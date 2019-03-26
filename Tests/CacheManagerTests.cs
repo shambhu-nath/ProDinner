@@ -70,7 +70,7 @@ namespace Omu.ProDinner.Tests
             cache.RemoveGroup("g1");
             Assert.AreEqual(0, strg.Data.Count);
         }
-
+// Validate Check-in Changes in VSTS
         public class MyCacheStorage : ICacheStorage
         {
             public ConcurrentDictionary<string, object> Data = new ConcurrentDictionary<string, object>();
