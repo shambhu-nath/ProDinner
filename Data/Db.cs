@@ -9,6 +9,7 @@ namespace Omu.ProDinner.Data
         {
             Database.SetInitializer<Db>(null);
         }
+        //Just To see
 
         public DbSet<Country> Countries { get; set; }
         public DbSet<Chef> Chefs { get; set; }
