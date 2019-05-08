@@ -86,6 +86,7 @@ insert roles values('role1')
 insert roles values('role2')
 insert roles values('role3')
 insert roles values('role4')
+insert roles values('role5')
 
 insert users values('admin','rwVPB7HX8AjAoCNVXS+U3WtbY+kuN/cOmAZ042aG',0)
 insert users values('super','Ylfui9ZMb18enpkNT3m/LRBJPlT1zePU7BdBlck7',0)
